@@ -17,7 +17,6 @@ export const HeroCard = ({ person, onClick }: { person: Person; onClick: () => v
         display: 'flex',
         flexDirection: 'column',
         width: '100%',
-        maxWidth: { sm: '400px', md: '450px', lg: '400px' },
         transition: 'transform 0.3s ease, box-shadow 0.3s ease',
         '&:hover': {
           transform: 'translateY(-8px) scale(1.02)',
