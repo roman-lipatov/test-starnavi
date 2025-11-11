@@ -1,10 +1,24 @@
-import { Dialog, DialogTitle, DialogContent, IconButton, Box, Typography, Divider, Chip, Tabs, Tab } from '@mui/material';
+import { 
+  Dialog, 
+  DialogTitle, 
+  DialogContent, 
+  IconButton, 
+  Box, 
+  Typography, 
+  Divider, 
+  Chip, 
+  Tabs, 
+  Tab, 
+  Avatar 
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { usePersonQuery } from '../hooks/usePersonQuery';
 import { useFilmsQuery } from '../hooks/useFilmsQuery';
 import { Loader } from '@/shared/components/Loader';
 import { ErrorMessage } from '@/shared/components/ErrorMessage';
 import { getHeroCardImage } from '@/shared/utils/heroImages';
+import { getInitials } from '@/shared/utils/getInitials';
+import { capitalize } from '@/shared/utils/capitalize';
 import { useMemo, useState } from 'react';
 import { HeroGraph } from './HeroGraph';
 
@@ -13,10 +27,11 @@ type HeroDetailsProps = {
   onClose: () => void;
 }
 
-type ViewMode = 'text' | 'graph';
+type ViewMode = 'info' | 'graph';
 
 export const HeroDetails = ({ heroId, onClose }: HeroDetailsProps) => {
-  const [viewMode, setViewMode] = useState<ViewMode>('text');
+  const [viewMode, setViewMode] = useState<ViewMode>('info');
+  const [imageError, setImageError] = useState(false);
   const { data: person, isLoading, error } = usePersonQuery(heroId);
   const filmsQueries = useFilmsQuery(person?.films || []);
   
@@ -29,73 +44,172 @@ export const HeroDetails = ({ heroId, onClose }: HeroDetailsProps) => {
   const isLoadingFilms = filmsQueries.some(query => query.isLoading);
 
   return (
-    <Dialog open={true} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>
+    <Dialog 
+      open={true} 
+      onClose={onClose} 
+      maxWidth="md" 
+      fullWidth
+      fullScreen={false}
+      slotProps={{
+        paper: {
+          sx: {
+            borderRadius: { xs: 0, sm: 2 },
+            maxHeight: { xs: '100vh', sm: '90vh' },
+          },
+        },
+      }}
+    >
+      <DialogTitle sx={{ pb: 1 }}>
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h5">Hero Details</Typography>
-          <IconButton onClick={onClose} size="small">
+          <Typography variant="h5" component="h2" fontWeight="bold">
+            Hero Details
+          </Typography>
+          <IconButton 
+            onClick={onClose} 
+            size="small"
+            sx={{
+              '&:hover': {
+                backgroundColor: 'action.hover',
+              },
+            }}
+          >
             <CloseIcon />
           </IconButton>
         </Box>
       </DialogTitle>
-      <DialogContent>
+      <DialogContent dividers sx={{ px: { xs: 2, sm: 3 }, py: 3 }}>
         {isLoading && <Loader />}
         {error && <ErrorMessage message={error.message} />}
         {person && (
           <Box>
             <Box sx={{ textAlign: 'center', mb: 3 }}>
-              <Box
-                component="img"
-                src={getHeroCardImage(person.id)}
-                alt={person.name}
-                sx={{
-                  width: 200,
-                  height: 200,
-                  borderRadius: 2,
-                  objectFit: 'cover',
-                }}
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = 'https://via.placeholder.com/200';
-                }}
-              />
-              <Typography variant="h4" sx={{ mt: 2 }}>
+              {imageError ? (
+                <Box
+                  sx={{
+                    width: { xs: 150, sm: 200 },
+                    height: { xs: 150, sm: 200 },
+                    borderRadius: 2,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)',
+                    boxShadow: 4,
+                    border: '4px solid',
+                    borderColor: 'primary.main',
+                    mx: 'auto',
+                  }}
+                >
+                  <Avatar
+                    sx={{
+                      width: { xs: 100, sm: 140 },
+                      height: { xs: 100, sm: 140 },
+                      bgcolor: 'rgba(255, 255, 255, 0.2)',
+                      color: 'white',
+                      fontSize: { xs: '2.5rem', sm: '3.5rem' },
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    {getInitials(person.name)}
+                  </Avatar>
+                </Box>
+              ) : (
+                <Box
+                  component="img"
+                  src={getHeroCardImage(person.id)}
+                  alt={person.name}
+                  sx={{
+                    width: { xs: 150, sm: 200 },
+                    height: { xs: 150, sm: 200 },
+                    borderRadius: 2,
+                    objectFit: 'cover',
+                    boxShadow: 4,
+                    border: '4px solid',
+                    borderColor: 'primary.main',
+                  }}
+                  onError={() => {
+                    setImageError(true);
+                  }}
+                />
+              )}
+              <Typography variant="h4" sx={{ mt: 2, fontWeight: 'bold' }}>
                 {person.name}
               </Typography>
             </Box>
-            <Divider sx={{ my: 2 }} />
-            <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
-              <Tabs value={viewMode} onChange={(_, newValue) => setViewMode(newValue)}>
-                <Tab label="Text View" value="text" />
+            <Divider sx={{ my: 3 }} />
+            <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+              <Tabs 
+                value={viewMode} 
+                onChange={(_, newValue) => setViewMode(newValue)}
+                variant="fullWidth"
+                sx={{
+                  '& .MuiTab-root': {
+                    fontSize: { xs: '0.875rem', sm: '1rem' },
+                  },
+                }}
+              >
+                <Tab label="Info View" value="info" />
                 <Tab label="Graph View" value="graph" />
               </Tabs>
             </Box>
-            {viewMode === 'text' ? (
+            {viewMode === 'info' ? (
               <Box>
-                <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2, mb: 2 }}>
-                  <Typography><strong>Height:</strong> {person.height} cm</Typography>
-                  <Typography><strong>Mass:</strong> {person.mass} kg</Typography>
-                  <Typography><strong>Hair Color:</strong> {person.hair_color}</Typography>
-                  <Typography><strong>Skin Color:</strong> {person.skin_color}</Typography>
-                  <Typography><strong>Eye Color:</strong> {person.eye_color}</Typography>
-                  <Typography><strong>Birth Year:</strong> {person.birth_year}</Typography>
-                  <Typography><strong>Gender:</strong> {person.gender}</Typography>
-                  <Typography><strong>Starships:</strong> {person.starships.length}</Typography>
+                <Box 
+                  sx={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
+                    gap: 2, 
+                    mb: 3 
+                  }}
+                >
+                  <Box sx={{ p: 2, borderRadius: 1, bgcolor: 'grey.50' }}>
+                    <Typography variant="caption" color="text.secondary">Height</Typography>
+                    <Typography variant="body1" fontWeight="medium">{person.height} cm</Typography>
+                  </Box>
+                  <Box sx={{ p: 2, borderRadius: 1, bgcolor: 'grey.50' }}>
+                    <Typography variant="caption" color="text.secondary">Mass</Typography>
+                    <Typography variant="body1" fontWeight="medium">{person.mass} kg</Typography>
+                  </Box>
+                  <Box sx={{ p: 2, borderRadius: 1, bgcolor: 'grey.50' }}>
+                    <Typography variant="caption" color="text.secondary">Hair Color</Typography>
+                    <Typography variant="body1" fontWeight="medium">{capitalize(person.hair_color)}</Typography>
+                  </Box>
+                  <Box sx={{ p: 2, borderRadius: 1, bgcolor: 'grey.50' }}>
+                    <Typography variant="caption" color="text.secondary">Skin Color</Typography>
+                    <Typography variant="body1" fontWeight="medium">{capitalize(person.skin_color)}</Typography>
+                  </Box>
+                  <Box sx={{ p: 2, borderRadius: 1, bgcolor: 'grey.50' }}>
+                    <Typography variant="caption" color="text.secondary">Eye Color</Typography>
+                    <Typography variant="body1" fontWeight="medium">{capitalize(person.eye_color)}</Typography>
+                  </Box>
+                  <Box sx={{ p: 2, borderRadius: 1, bgcolor: 'grey.50' }}>
+                    <Typography variant="caption" color="text.secondary">Birth Year</Typography>
+                    <Typography variant="body1" fontWeight="medium">{person.birth_year}</Typography>
+                  </Box>
+                  <Box sx={{ p: 2, borderRadius: 1, bgcolor: 'grey.50' }}>
+                    <Typography variant="caption" color="text.secondary">Gender</Typography>
+                    <Typography variant="body1" fontWeight="medium">{capitalize(person.gender)}</Typography>
+                  </Box>
+                  <Box sx={{ p: 2, borderRadius: 1, bgcolor: 'grey.50' }}>
+                    <Typography variant="caption" color="text.secondary">Starships</Typography>
+                    <Typography variant="body1" fontWeight="medium">{person.starships.length}</Typography>
+                  </Box>
                 </Box>
-                <Divider sx={{ my: 2 }} />
+                <Divider sx={{ my: 3 }} />
                 <Box>
-                  <Typography variant="h6" gutterBottom>
-                    <strong>Films:</strong>
+                  <Typography variant="h6" gutterBottom fontWeight="bold">
+                    Films
                   </Typography>
                   {isLoadingFilms ? (
                     <Typography color="text.secondary">Loading films...</Typography>
                   ) : films.length > 0 ? (
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2 }}>
                       {films.map((film) => (
                         <Chip 
                           key={film.id} 
                           label={film.title} 
                           color="primary" 
                           variant="outlined"
+                          sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
                         />
                       ))}
                     </Box>

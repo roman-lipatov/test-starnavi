@@ -15,12 +15,32 @@ function App() {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Box sx={{ mb: 4, textAlign: 'center' }}>
-        <Typography variant="h3" component="h1" gutterBottom>
+    <Container 
+      maxWidth="xl" 
+      sx={{ 
+        py: { xs: 2, sm: 4 },
+        px: { xs: 2, sm: 3 },
+      }}
+    >
+      <Box sx={{ mb: { xs: 3, sm: 4 }, textAlign: 'center' }}>
+        <Typography 
+          variant="h3" 
+          component="h1" 
+          gutterBottom
+          sx={{
+            fontSize: { xs: '2rem', sm: '3rem' },
+            fontWeight: 'bold',
+          }}
+        >
           Star Wars Heroes
         </Typography>
-        <Typography variant="body1" color="text.secondary">
+        <Typography 
+          variant="body1" 
+          color="text.secondary"
+          sx={{
+            fontSize: { xs: '0.875rem', sm: '1rem' },
+          }}
+        >
           Explore the galaxy of Star Wars characters
         </Typography>
       </Box>

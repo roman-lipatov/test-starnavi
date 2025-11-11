@@ -53,7 +53,17 @@ export const HeroGraph = ({ heroId, person, films }: HeroGraphProps) => {
   }
 
   return (
-    <Box sx={{ height: '600px', width: '100%', border: '1px solid #e0e0e0', borderRadius: 2 }}>
+    <Box 
+      sx={{ 
+        height: { xs: '400px', sm: '500px', md: '600px' },
+        width: '100%', 
+        border: '1px solid',
+        borderColor: 'divider',
+        borderRadius: 2,
+        overflow: 'hidden',
+        backgroundColor: 'grey.50',
+      }}
+    >
       <ReactFlow
         nodes={graphData.nodes}
         edges={graphData.edges}
@@ -69,7 +79,17 @@ export const HeroGraph = ({ heroId, person, films }: HeroGraphProps) => {
       >
         <Background />
         <Controls />
-        <MiniMap />
+        <MiniMap 
+          style={{
+            backgroundColor: 'white',
+            border: '1px solid #e0e0e0',
+          }}
+          nodeColor={(node) => {
+            if (node.type === 'person') return '#1976d2';
+            if (node.type === 'film') return '#dc004e';
+            return '#2e7d32';
+          }}
+        />
       </ReactFlow>
     </Box>
   );
