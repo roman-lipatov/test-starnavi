@@ -19,8 +19,8 @@ export const PersonNode = ({ data }: NodeProps<PersonNodeData>) => {
         position: 'relative',
       }}
     >
-      <Handle type="source" position={Position.Right} id="source" />
-      <Handle type="target" position={Position.Left} id="target" />
+      <Handle type="source" position={Position.Bottom} id="source" />
+      <Handle type="target" position={Position.Top} id="target" />
       {data.image && (
         <Box
           component="img"

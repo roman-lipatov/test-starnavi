@@ -16,7 +16,6 @@ type HeroGraphProps = {
   films: Film[];
 };
 
-// Виносимо nodeTypes назовні, щоб уникнути помилки React Flow
 const nodeTypes = {
   person: PersonNode,
   film: FilmNode,

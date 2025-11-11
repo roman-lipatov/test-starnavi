@@ -19,8 +19,8 @@ export const FilmNode = ({ data }: NodeProps<FilmNodeData>) => {
         position: 'relative',
       }}
     >
-      <Handle type="source" position={Position.Right} id="source" />
-      <Handle type="target" position={Position.Left} id="target" />
+      <Handle type="source" position={Position.Bottom} id="source" />
+      <Handle type="target" position={Position.Top} id="target" />
       <Typography variant="caption" display="block" sx={{ mb: 0.5 }}>
         Episode {data.episode}
       </Typography>

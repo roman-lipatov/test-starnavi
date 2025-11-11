@@ -1,73 +1,212 @@
-# React + TypeScript + Vite
+# Star Wars Heroes
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React web application for exploring Star Wars characters, their films, and starships. Built with React, TypeScript, and React Flow for interactive graph visualization.
 
-Currently, two official plugins are available:
+## 🌟 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Hero List**: Browse all Star Wars characters with pagination
+- **Detailed Information**: View comprehensive details about each character
+- **Graph Visualization**: Interactive graph showing relationships between heroes, films, and starships
+- **Two View Modes**: Switch between text view and graph view
+- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
+- **Modern UI**: Built with Material-UI (MUI) for a polished user experience
 
-## React Compiler
+## 🚀 Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Prerequisites
 
-## Expanding the ESLint configuration
+- Node.js (v18 or higher)
+- npm or yarn
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Installation
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd test-starnavi
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+2. Install dependencies:
+```bash
+npm install
 ```
+
+3. Create a `.env` file in the root directory:
+```env
+VITE_API_URL=https://sw-api.starnavi.io
+```
+
+4. Start the development server:
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:5173`
+
+## 📜 Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+- `npm test` - Run tests in watch mode
+- `npm test -- --run` - Run tests once
+- `npm run test:ui` - Run tests with UI
+- `npm run test:coverage` - Run tests with coverage report
+
+## 🛠️ Technologies
+
+### Core
+- **React** 19.1.1 - UI library
+- **TypeScript** 5.9.3 - Type safety
+- **Vite** 7.1.7 - Build tool and dev server
+
+### UI & Styling
+- **Material-UI (MUI)** 7.3.5 - Component library
+- **Emotion** - CSS-in-JS styling
+
+### Data Management
+- **TanStack Query** 5.90.7 - Data fetching, caching, and synchronization
+- **Axios** 1.13.2 - HTTP client
+
+### Visualization
+- **React Flow** 11.11.4 - Graph visualization library
+
+### Testing
+- **Vitest** 4.0.8 - Test runner
+- **Testing Library** - React component testing utilities
+
+## 📁 Project Structure
+
+```
+src/
+├── features/              # Feature-based modules
+│   ├── hero-list/        # Hero list feature
+│   │   ├── components/   # HeroList, HeroCard
+│   │   └── hooks/        # usePeopleQuery
+│   └── hero-details/     # Hero details feature
+│       ├── components/   # HeroDetails, HeroGraph, CustomNodes
+│       └── hooks/        # usePersonQuery, useFilmsQuery, etc.
+├── shared/               # Shared resources
+│   ├── api/             # API functions
+│   ├── components/      # Shared components (Loader, ErrorMessage)
+│   ├── types/           # TypeScript type definitions
+│   └── utils/           # Utility functions
+├── providers/           # Context providers
+│   ├── QueryProvider.tsx
+│   └── ThemeProvider.tsx
+└── test/                # Test setup
+    └── setup.ts
+```
+
+## 🎯 Key Features Explained
+
+### Hero List
+- Displays all Star Wars characters in a responsive grid
+- Pagination for easy navigation
+- Click on any hero card to view detailed information
+
+### Hero Details
+- **Text View**: Shows character information (height, mass, hair color, etc.) and associated films
+- **Graph View**: Interactive graph visualization with:
+  - Hero node at the top
+  - Film nodes in the middle row
+  - Starship nodes at the bottom
+  - Color-coded connections (blue for hero→films, different colors for film→starships)
+
+### Graph Visualization
+The graph uses a hierarchical top-down layout:
+- **Person Node**: The selected hero
+- **Film Nodes**: Films the hero appeared in
+- **Starship Nodes**: Starships the hero traveled on in specific films
+- **Edges**: Visual connections showing relationships
+
+## 🧪 Testing
+
+The project includes comprehensive unit tests for:
+- Utility functions (`graphBuilder`, `heroImages`)
+- API functions (with mocked requests)
+- React Query hooks
+- React components
+
+All tests use mocked API calls to ensure fast and reliable testing.
+
+See [TESTING.md](./TESTING.md) for detailed testing documentation.
+
+## 🌐 API
+
+The application uses the Star Wars API: `https://sw-api.starnavi.io`
+
+### Endpoints Used
+- `GET /people/` - Get paginated list of people
+- `GET /people/{id}/` - Get person by ID
+- `GET /films/{id}/` - Get film by ID
+- `GET /starships/{id}/` - Get starship by ID
+
+## 🏗️ Architecture
+
+The project follows a **feature-based architecture**:
+- Features are self-contained modules with their own components and hooks
+- Shared code (utilities, types, components) is in the `shared` directory
+- Clean separation of concerns
+- Reusable components and hooks
+
+### Code Quality Principles
+- **SOLID** principles
+- **DRY** (Don't Repeat Yourself)
+- **KISS** (Keep It Simple, Stupid)
+- TypeScript for type safety
+- English comments throughout the codebase
+
+## 📦 Building for Production
+
+```bash
+npm run build
+```
+
+The production build will be in the `dist` directory.
+
+## 🚢 Deployment
+
+### GitHub Pages
+
+1. Install `gh-pages`:
+```bash
+npm install --save-dev gh-pages
+```
+
+2. Add to `package.json`:
+```json
+{
+  "scripts": {
+    "deploy": "npm run build && gh-pages -d dist"
+  }
+}
+```
+
+3. Update `vite.config.ts`:
+```typescript
+export default defineConfig({
+  base: '/test-starnavi/', // Your repository name
+  // ... rest of config
+})
+```
+
+4. Deploy:
+```bash
+npm run deploy
+```
+
+## 📝 License
+
+This project is created as a test assignment.
+
+## 👤 Author
+
+Created as part of a technical test assignment.
+
+## 🙏 Acknowledgments
+
+- Star Wars API: `sw-api.starnavi.io`
+- React Flow for graph visualization
+- Material-UI for the component library

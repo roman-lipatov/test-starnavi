@@ -19,7 +19,7 @@ export const StarshipNode = ({ data }: NodeProps<StarshipNodeData>) => {
         position: 'relative',
       }}
     >
-      <Handle type="target" position={Position.Left} id="target" />
+      <Handle type="target" position={Position.Top} id="target" />
       <Typography variant="caption" fontWeight="bold" sx={{ fontSize: '0.7rem' }}>
         {data.label}
       </Typography>
