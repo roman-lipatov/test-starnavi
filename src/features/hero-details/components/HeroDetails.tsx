@@ -21,6 +21,7 @@ import { getInitials } from '@/shared/utils/getInitials';
 import { capitalize } from '@/shared/utils/capitalize';
 import { useMemo, useState } from 'react';
 import { HeroGraph } from './HeroGraph';
+import type { Person } from '@/shared/types/api';
 
 type HeroDetailsProps = {
   heroId: number;
@@ -28,6 +29,24 @@ type HeroDetailsProps = {
 }
 
 type ViewMode = 'info' | 'graph';
+
+const InfoCard = ({ label, value }: { label: string; value: string | number }) => (
+  <Box sx={{ p: 2, borderRadius: 1, bgcolor: 'grey.50' }}>
+    <Typography variant="caption" color="text.secondary">{label}</Typography>
+    <Typography variant="body1" fontWeight="medium">{value}</Typography>
+  </Box>
+);
+
+const getPersonInfoFields = (person: Person) => [
+  { label: 'Height', value: `${person.height} cm` },
+  { label: 'Mass', value: `${person.mass} kg` },
+  { label: 'Hair Color', value: capitalize(person.hair_color) },
+  { label: 'Skin Color', value: capitalize(person.skin_color) },
+  { label: 'Eye Color', value: capitalize(person.eye_color) },
+  { label: 'Birth Year', value: person.birth_year },
+  { label: 'Gender', value: capitalize(person.gender) },
+  { label: 'Starships', value: person.starships.length },
+];
 
 export const HeroDetails = ({ heroId, onClose }: HeroDetailsProps) => {
   const [viewMode, setViewMode] = useState<ViewMode>('info');
@@ -161,38 +180,9 @@ export const HeroDetails = ({ heroId, onClose }: HeroDetailsProps) => {
                     mb: 3 
                   }}
                 >
-                  <Box sx={{ p: 2, borderRadius: 1, bgcolor: 'grey.50' }}>
-                    <Typography variant="caption" color="text.secondary">Height</Typography>
-                    <Typography variant="body1" fontWeight="medium">{person.height} cm</Typography>
-                  </Box>
-                  <Box sx={{ p: 2, borderRadius: 1, bgcolor: 'grey.50' }}>
-                    <Typography variant="caption" color="text.secondary">Mass</Typography>
-                    <Typography variant="body1" fontWeight="medium">{person.mass} kg</Typography>
-                  </Box>
-                  <Box sx={{ p: 2, borderRadius: 1, bgcolor: 'grey.50' }}>
-                    <Typography variant="caption" color="text.secondary">Hair Color</Typography>
-                    <Typography variant="body1" fontWeight="medium">{capitalize(person.hair_color)}</Typography>
-                  </Box>
-                  <Box sx={{ p: 2, borderRadius: 1, bgcolor: 'grey.50' }}>
-                    <Typography variant="caption" color="text.secondary">Skin Color</Typography>
-                    <Typography variant="body1" fontWeight="medium">{capitalize(person.skin_color)}</Typography>
-                  </Box>
-                  <Box sx={{ p: 2, borderRadius: 1, bgcolor: 'grey.50' }}>
-                    <Typography variant="caption" color="text.secondary">Eye Color</Typography>
-                    <Typography variant="body1" fontWeight="medium">{capitalize(person.eye_color)}</Typography>
-                  </Box>
-                  <Box sx={{ p: 2, borderRadius: 1, bgcolor: 'grey.50' }}>
-                    <Typography variant="caption" color="text.secondary">Birth Year</Typography>
-                    <Typography variant="body1" fontWeight="medium">{person.birth_year}</Typography>
-                  </Box>
-                  <Box sx={{ p: 2, borderRadius: 1, bgcolor: 'grey.50' }}>
-                    <Typography variant="caption" color="text.secondary">Gender</Typography>
-                    <Typography variant="body1" fontWeight="medium">{capitalize(person.gender)}</Typography>
-                  </Box>
-                  <Box sx={{ p: 2, borderRadius: 1, bgcolor: 'grey.50' }}>
-                    <Typography variant="caption" color="text.secondary">Starships</Typography>
-                    <Typography variant="body1" fontWeight="medium">{person.starships.length}</Typography>
-                  </Box>
+                  {getPersonInfoFields(person).map((field) => (
+                    <InfoCard key={field.label} label={field.label} value={field.value} />
+                  ))}
                 </Box>
                 <Divider sx={{ my: 3 }} />
                 <Box>

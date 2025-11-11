@@ -10,22 +10,18 @@ type GraphData = {
 };
 
 export const useGraphData = (_heroId: number, person: Person, films: Film[]): { graphData: GraphData | null; isLoading: boolean; error?: string } => {
-  // Collect only starship IDs that are in both person.starships and film.starships for each film
-  // This ensures we only fetch starships that the person actually used in specific films
   const starshipIds = useMemo(() => {
     if (!person || films.length === 0) return [];
     
     const relevantStarshipIds: number[] = [];
     
     films.forEach(film => {
-      // Find intersection: starships that are in both person.starships and film.starships
       const filmStarships = (film.starships || []).filter(starshipId => 
         person.starships.includes(starshipId)
       );
       relevantStarshipIds.push(...filmStarships);
     });
     
-    // Remove duplicates
     return Array.from(new Set(relevantStarshipIds));
   }, [person, films]);
 

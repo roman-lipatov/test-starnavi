@@ -170,32 +170,37 @@ The production build will be in the `dist` directory.
 
 ### GitHub Pages
 
-1. Install `gh-pages`:
+The project is configured for automatic deployment to GitHub Pages using GitHub Actions.
+
+**Live Demo**: [View on GitHub Pages](https://roman-lipatov.github.io/test-starnavi/)
+
+#### Automatic Deployment
+
+The project uses GitHub Actions workflow (`.github/workflows/deploy.yml`) that automatically:
+1. Builds the project on every push to `main` branch
+2. Deploys the built files to GitHub Pages
+
+**To enable GitHub Pages:**
+1. Go to your repository settings on GitHub
+2. Navigate to **Pages** section
+3. Under **Source**, select **GitHub Actions**
+4. The workflow will automatically deploy on the next push to `main`
+
+#### Manual Deployment
+
+If you need to deploy manually:
+
+1. Build the project:
 ```bash
-npm install --save-dev gh-pages
+npm run build
 ```
 
-2. Add to `package.json`:
-```json
-{
-  "scripts": {
-    "deploy": "npm run build && gh-pages -d dist"
-  }
-}
-```
-
-3. Update `vite.config.ts`:
+2. The `vite.config.ts` is already configured with the correct `base` path:
 ```typescript
-export default defineConfig({
-  base: '/test-starnavi/', // Your repository name
-  // ... rest of config
-})
+base: '/test-starnavi/'
 ```
 
-4. Deploy:
-```bash
-npm run deploy
-```
+3. Push to `main` branch - GitHub Actions will handle the deployment automatically.
 
 ## 📝 License
 
